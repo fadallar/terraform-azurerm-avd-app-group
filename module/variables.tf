@@ -38,7 +38,7 @@ variable "description" {
 variable "default_desktop_display_name" {
   type        = string
   description = "Option to set the display name for the default sessionDesktop desktop when type is set to Desktop."
-  default     = null
+  default     = ""
   ### TO-DO add Validation Block
 }
 
