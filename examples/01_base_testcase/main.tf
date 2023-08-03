@@ -148,7 +148,7 @@ module "avdappgroup_desktop" {
   # Module Parameters
   friendly_name                = local.avd_app_group_friendly_name
   description                  = local.avd_app_group_description
-  type                         = avd_app_group_types[0]
+  type                         = local.avd_app_group_types[0]
   host_pool_id                 = module.avdhostpool_desktop.id
   default_desktop_display_name = local.avd_app_group_default_desktop_display_name
 
@@ -168,6 +168,6 @@ module "avdappgroup_rail" {
   # Module Parameters
   friendly_name = local.avd_app_group_friendly_name
   description   = local.avd_app_group_description
-  type          = avd_app_group_types[1]
+  type          = local.avd_app_group_types[1]
   host_pool_id  = module.avdhostpool_rail.id
 }
