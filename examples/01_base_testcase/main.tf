@@ -44,7 +44,7 @@ locals {
   # AVD App Group
   avd_app_group_friendly_name                = "My friendly name"
   avd_app_group_description                  = "My description"
-  avd_app_group_default_desktop_display_name = ""
+  avd_app_group_default_desktop_display_name = "This is not empty"
   avd_app_group_types                        = ["Desktop", "RemoteApp"]
 }
 
