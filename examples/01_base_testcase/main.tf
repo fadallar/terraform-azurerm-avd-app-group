@@ -97,6 +97,7 @@ module "avdhostpool_desktop" {
   default_tags                    = module.base_tagging.base_tags
   extra_tags                      = local.extra_tags
   diag_log_analytics_workspace_id = module.diag_log_analytics_workspace.log_analytics_workspace_id
+  workload_info                   = "desktop"
 
   # Module Parameters
 
@@ -120,7 +121,7 @@ module "avdhostpool_rail" {
   default_tags                    = module.base_tagging.base_tags
   extra_tags                      = local.extra_tags
   diag_log_analytics_workspace_id = module.diag_log_analytics_workspace.log_analytics_workspace_id
-
+  workload_info                   = "rail"
   # Module Parameters
 
   friendly_name                    = local.avd_host_friendly_name
@@ -144,6 +145,7 @@ module "avdappgroup_desktop" {
   default_tags                    = module.base_tagging.base_tags
   extra_tags                      = local.extra_tags
   diag_log_analytics_workspace_id = module.diag_log_analytics_workspace.log_analytics_workspace_id
+  workload_info                   = "desktop"
 
   # Module Parameters
   friendly_name                = local.avd_app_group_friendly_name
@@ -165,6 +167,7 @@ module "avdappgroup_rail" {
   extra_tags                      = local.extra_tags
   diag_log_analytics_workspace_id = module.diag_log_analytics_workspace.log_analytics_workspace_id
   default_desktop_display_name = local.avd_app_group_default_desktop_display_name
+  workload_info                   = "rail"
 
   # Module Parameters
   friendly_name = local.avd_app_group_friendly_name
