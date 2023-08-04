@@ -22,9 +22,6 @@ locals {
   technical_owner = "Fabrice"
 
   # AVD Host Pool
-
-  registration_expiration_date = "2023-08-05T23:40:52Z"
-
   avd_host_friendly_name                   = "my friendly name"
   avd_host_description                     = "my description"
   avd_host_private_endpoint                = false
@@ -41,6 +38,12 @@ locals {
 
     }
   ]
+
+  # AVD Workspace
+  avd_workspace_friendly_name    = "My friendly name"
+  avd_workspace_description      = "My description"
+  avd_workspace_private_endpoint = false
+
   # AVD App Group
   avd_app_group_friendly_name                = "My friendly name"
   avd_app_group_description                  = "My description"
@@ -134,6 +137,23 @@ module "avdhostpool_rail" {
   preferred_app_group_type         = "RailApplications"
 }
 
+module "avd_workspace" {
+  source                          = "../../../terraform-azurerm-avd-workspace/module"
+  landing_zone_slug               = local.landing_zone_slug
+  stack                           = local.stack
+  location                        = module.regions.location
+  location_short                  = module.regions.location_short
+  resource_group_name             = module.resource_group.resource_group_name
+  default_tags                    = module.base_tagging.base_tags
+  extra_tags                      = local.extra_tags
+  diag_log_analytics_workspace_id = module.diag_log_analytics_workspace.log_analytics_workspace_id
+
+  # Module Parameters
+  friendly_name           = local.avd_workspace_friendly_name
+  description             = local.avd_workspace_description
+  enable_private_endpoint = local.avd_workspace_private_endpoint
+}
+
 # Please specify source as git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git<<ADD_MODULE_NAME>>//module?ref=master or with specific tag
 module "avdappgroup_desktop" {
   source                          = "../../module"
@@ -153,7 +173,7 @@ module "avdappgroup_desktop" {
   type                         = local.avd_app_group_types[0]
   host_pool_id                 = module.avdhostpool_desktop.avd_host_pool_id
   default_desktop_display_name = local.avd_app_group_default_desktop_display_name
-
+  associated_workspace_id      = module.avd_workspace.avd_workspace_id
 }
 
 module "avdappgroup_rail" {
@@ -174,4 +194,5 @@ module "avdappgroup_rail" {
   description   = local.avd_app_group_description
   type          = local.avd_app_group_types[1]
   host_pool_id  = module.avdhostpool_rail.avd_host_pool_id
+  associated_workspace_id      = module.avd_workspace.avd_workspace_id
 }
