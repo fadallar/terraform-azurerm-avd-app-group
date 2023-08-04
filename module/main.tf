@@ -14,3 +14,8 @@ resource "azurerm_virtual_desktop_application_group" "this" {
   tags                         = merge(var.default_tags, var.extra_tags)
 }
 
+resource "azurerm_virtual_desktop_workspace_application_group_association" "this" {
+  for_each             = toset(var.enable_workspace_association ? ["enabled"] : [])
+  workspace_id         = var.associated_workspace_id
+  application_group_id = azurerm_virtual_desktop_application_group.this.id
+}

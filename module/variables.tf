@@ -56,3 +56,15 @@ variable "host_pool_id" {
   type        = string
   description = "Resource ID for a Virtual Desktop Host Pool to associate with the Virtual Desktop Application Group. Changing the name forces a new resource to be created."
 }
+
+variable "enable_workspace_association" {
+  type = bool
+  description = "Enable the association with an AVD workspace. If set to true an AVD App Workspace Id must be provided"
+  default = true
+}
+
+variable "associated_workspace_id" {
+  type        = string
+  description = "Resource Id of the AVD workspcae this app group is associated with"
+  default     = null
+}
