@@ -1,6 +1,6 @@
 # Test case local inputs
 locals {
-  stack             = "avdappgroup"
+  stack             = "avdappgroup-01"
   landing_zone_slug = "sbx"
   location          = "westeurope"
 
@@ -90,7 +90,7 @@ module "diag_log_analytics_workspace" {
 
 }
 
-module "avdhostpool_desktop" {
+module "avd_host_pool_desktop" {
   source                          = "../../../terraform-azurerm-avd-host-pool/module"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
@@ -113,7 +113,7 @@ module "avdhostpool_desktop" {
   preferred_app_group_type         = "Desktop"
 }
 
-module "avdhostpool_rail" {
+module "avd_host_pool_rail" {
   source                          = "../../../terraform-azurerm-avd-host-pool/module"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
@@ -153,7 +153,7 @@ module "avd_workspace" {
 }
 
 # Please specify source as git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git<<ADD_MODULE_NAME>>//module?ref=master or with specific tag
-module "avdappgroup_desktop" {
+module "avd_app_group_desktop" {
   source                          = "../../module"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
@@ -169,12 +169,12 @@ module "avdappgroup_desktop" {
   friendly_name                = local.avd_app_group_friendly_name
   description                  = local.avd_app_group_description
   type                         = local.avd_app_group_types[0]
-  host_pool_id                 = module.avdhostpool_desktop.avd_host_pool_id
+  host_pool_id                 = module.avd_host_pool_desktop.avd_host_pool_id
   default_desktop_display_name = local.avd_app_group_default_desktop_display_name
   associated_workspace_id      = module.avd_workspace.avd_workspace_id
 }
 
-module "avdappgroup_rail" {
+module "avd_app_group_rail" {
   source                          = "../../module"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
@@ -191,6 +191,6 @@ module "avdappgroup_rail" {
   friendly_name = local.avd_app_group_friendly_name
   description   = local.avd_app_group_description
   type          = local.avd_app_group_types[1]
-  host_pool_id  = module.avdhostpool_rail.avd_host_pool_id
+  host_pool_id  = module.avd_host_pool_rail.avd_host_pool_id
   associated_workspace_id      = module.avd_workspace.avd_workspace_id
 }
