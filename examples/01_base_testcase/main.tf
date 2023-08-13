@@ -52,12 +52,12 @@ locals {
 }
 
 module "regions" {
-  source       = "git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git/terraform-azurerm-regions//module?ref=master"
+  source       = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-regions//module?ref=master"
   azure_region = local.location
 }
 
 module "base_tagging" {
-  source          = "git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git/terraform-azurerm-basetagging//module?ref=master"
+  source          = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-basetagging//module?ref=master"
   environment     = local.environment
   application     = local.application
   cost_center     = local.cost_center
@@ -70,7 +70,7 @@ module "base_tagging" {
 }
 
 module "resource_group" {
-  source            = "git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git/terraform-azurerm-resourcegroup//module?ref=master"
+  source            = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-resourcegroup//module?ref=master"
   stack             = local.stack
   landing_zone_slug = local.landing_zone_slug
   default_tags      = module.base_tagging.base_tags
@@ -79,7 +79,7 @@ module "resource_group" {
 }
 
 module "diag_log_analytics_workspace" {
-  source = "git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git/terraform-azurerm-loganalyticsworkspace//module?ref=feature/use-tf-lock-file"
+  source = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-loganalyticsworkspace//module?ref=feature/use-tf-lock-file"
 
   landing_zone_slug   = local.landing_zone_slug
   stack               = local.stack
@@ -91,7 +91,7 @@ module "diag_log_analytics_workspace" {
 }
 
 module "avd_host_pool_desktop" {
-  source                          = "../../../terraform-azurerm-avd-host-pool/module"
+  source                          = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-avdhostpool//module?ref=develop"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
   location                        = module.regions.location
@@ -114,7 +114,7 @@ module "avd_host_pool_desktop" {
 }
 
 module "avd_host_pool_rail" {
-  source                          = "../../../terraform-azurerm-avd-host-pool/module"
+  source                          = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-avdhostpool//module?ref=develop"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
   location                        = module.regions.location
@@ -136,7 +136,7 @@ module "avd_host_pool_rail" {
 }
 
 module "avd_workspace" {
-  source                          = "../../../terraform-azurerm-avd-workspace/module"
+  source                          = "git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/terraform-azurerm-avdworkspace//module?ref=develop"
   landing_zone_slug               = local.landing_zone_slug
   stack                           = local.stack
   location                        = module.regions.location
@@ -152,7 +152,7 @@ module "avd_workspace" {
   enable_private_endpoint = local.avd_workspace_private_endpoint
 }
 
-# Please specify source as git::https://ECTL-AZURE@dev.azure.com/ECTL-AZURE/ECTL-Terraform-Modules/_git<<ADD_MODULE_NAME>>//module?ref=master or with specific tag
+# Please specify source as git::ssh://git@ssh.dev.azure.com/v3/ECTL-AZURE/ECTL-Terraform-Modules/<<ADD_MODULE_NAME>>//module?ref=master or with specific tag
 module "avd_app_group_desktop" {
   source                          = "../../module"
   landing_zone_slug               = local.landing_zone_slug
@@ -184,13 +184,13 @@ module "avd_app_group_rail" {
   default_tags                    = module.base_tagging.base_tags
   extra_tags                      = local.extra_tags
   diag_log_analytics_workspace_id = module.diag_log_analytics_workspace.log_analytics_workspace_id
-  default_desktop_display_name = local.avd_app_group_default_desktop_display_name
+  default_desktop_display_name    = local.avd_app_group_default_desktop_display_name
   workload_info                   = "rail"
 
   # Module Parameters
-  friendly_name = local.avd_app_group_friendly_name
-  description   = local.avd_app_group_description
-  type          = local.avd_app_group_types[1]
-  host_pool_id  = module.avd_host_pool_rail.avd_host_pool_id
-  associated_workspace_id      = module.avd_workspace.avd_workspace_id
+  friendly_name           = local.avd_app_group_friendly_name
+  description             = local.avd_app_group_description
+  type                    = local.avd_app_group_types[1]
+  host_pool_id            = module.avd_host_pool_rail.avd_host_pool_id
+  associated_workspace_id = module.avd_workspace.avd_workspace_id
 }
