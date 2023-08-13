@@ -58,9 +58,9 @@ variable "host_pool_id" {
 }
 
 variable "enable_workspace_association" {
-  type = bool
+  type        = bool
   description = "Enable the association with an AVD workspace. If set to true an AVD App Workspace Id must be provided"
-  default = true
+  default     = true
 }
 
 variable "associated_workspace_id" {

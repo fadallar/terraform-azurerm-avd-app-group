@@ -15,8 +15,7 @@ parameters:
 - name: testcases
   type: object
   default:
-    # TODO: Add test case subfolder names
-    - 01_example_testcase
+    - 01_base_testcase
 
 extends:
   template: /stages/mainstage.yaml@templates
