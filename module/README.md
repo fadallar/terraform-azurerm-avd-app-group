@@ -1,55 +1,34 @@
 <!-- BEGIN_AUTOMATED_TF_DOCS_BLOCK -->
-# Azure Virtual Desktop Application Group
+## Main.tf file content
 
-[![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](CHANGELOG.md) [![Notice](https://img.shields.io/badge/notice-copyright-yellow.svg)](NOTICE) [![Apache V2 License](https://img.shields.io/badge/license-Apache%20V2-orange.svg)](LICENSE)
-
-Module which creates an Azure Virtual Desktop Application group and its diagnostic settings
-
-## Examples
-
-[01\_base\_testcase](./examples/01\_base\_testcase/README.md)
-
-## Usage
-
-Basic usage of this module is as follows:
+Please replace the modules source and version with your relevant information
 
 ```hcl
-module "example" {
-   source  = "<module-path>"
+# Add Checkov skips here, if required.
 
-   # Required variables
-   description =
-   diag_log_analytics_workspace_id =
-   friendly_name =
-   host_pool_id =
-   landing_zone_slug =
-   location =
-   location_short =
-   resource_group_name =
-   stack =
+resource "azurerm_virtual_desktop_application_group" "this" {
+  name                = local.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
-   # Optional variables
-   associated_workspace_id = null
-   custom_name = ""
-   default_desktop_display_name = ""
-   default_tags = {}
-   diag_default_setting_name = "default"
-   diag_log_categories = [
-  "Checkpoint",
-  "Error",
-  "Management"
-]
-   diag_metric_categories = []
-   diag_retention_days = 30
-   diag_storage_account_id = null
-   enable_workspace_association = true
-   extra_tags = {}
-   log_analytics_destination_type = "Dedicated"
-   type = "Desktop"
-   workload_info = ""
+  type         = var.type
+  host_pool_id = var.host_pool_id
+
+  description                  = var.description
+  friendly_name                = var.friendly_name
+  default_desktop_display_name = var.default_desktop_display_name
+  tags                         = merge(var.default_tags, var.extra_tags)
+}
+
+resource "azurerm_virtual_desktop_workspace_application_group_association" "this" {
+  for_each             = toset(var.enable_workspace_association ? ["enabled"] : [])
+  workspace_id         = var.associated_workspace_id
+  application_group_id = azurerm_virtual_desktop_application_group.this.id
 }
 ```
+## Modules
 
+No modules.
 ## Requirements
 
 | Name | Version |
@@ -58,7 +37,6 @@ module "example" {
 | <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | >=1.8.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 3.61.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.4.3 |
-
 ## Resources
 
 | Name | Type |
@@ -67,7 +45,6 @@ module "example" {
 | [azurerm_virtual_desktop_application_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_application_group) | resource |
 | [azurerm_virtual_desktop_workspace_application_group_association.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_workspace_application_group_association) | resource |
 | [random_string.random](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -95,22 +72,9 @@ module "example" {
 | <a name="input_log_analytics_destination_type"></a> [log\_analytics\_destination\_type](#input\_log\_analytics\_destination\_type) | Possible values are AzureDiagnostics and Dedicated. Recommended value is Dedicated | `string` | `"Dedicated"` | no |
 | <a name="input_type"></a> [type](#input\_type) | Type of Virtual Desktop Application Group. Valid options are RemoteApp or Desktop application groups. Changing this forces a new resource to be created. | `string` | `"Desktop"` | no |
 | <a name="input_workload_info"></a> [workload\_info](#input\_workload\_info) | Workload additional info to be used in the resource name | `string` | `""` | no |
-
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_avd_appgroup_id"></a> [avd\_appgroup\_id](#output\_avd\_appgroup\_id) | Virtual Desktop Application Group resource id |
-
-## Contact
-
-Atos
-
-to regenerate this `README.md` file run in pwsh, in current directory:
-
-`docker run --rm -v "$($pwd.path):/data" cytopia/terraform-docs terraform-docs-012 -c tfdocs-config.yml ./module`
-
-`docker run --rm --name pre -v "$($pwd.path):/lint" -w /lint ghcr.io/antonbabenko/pre-commit-terraform run -a`
-
-`docker stop pre; docker rm pre; docker run --name pre -v "$($pwd.path):/lint" -w /lint ghcr.io/antonbabenko/pre-commit-terraform run -a`
 <!-- END_AUTOMATED_TF_DOCS_BLOCK -->
